@@ -127,15 +127,27 @@ Acc, Se, Sp và PPV đều trả về giá trị phần trăm từ 0 đến 100,
 
 Reference paper:
 [1] Joseph, V.R.: Optimal ratio for data splitting. Statistical Analysis and Data Mining: The ASA Data Science Journal. 15, 531–538 (2022). https://doi.org/10.1002/sam.11583 
+
 [2] Lacalamita, A., Piccinno, E., Scalavino, V., Bellotti, R., Giannelli, G., Serino, G.: A Gene-Based Machine Learning Classifier Associated to the Colorectal Adenoma—Carcinoma Sequence. Biomedicines. 9, 1937 (2021). https://doi.org/10.3390/biomedicines9121937 
+
 [3] Smyth, G.K.: Linear models and empirical bayes methods for assessing differential expression in microarray experiments. Stat Appl Genet Mol Biol. 3, Article3 (2004). https://doi.org/10.2202/1544-6115.1027
+
 [4] Fahami, M.A., Roshanzamir, M., Izadi, N.H., Keyvani, V., Alizadehsani, R.: Detection of effective genes in colon cancer: A machine learning approach. Informatics in Medicine Unlocked. 24, 100605 (2021). https://doi.org/10.1016/j.imu.2021.100605
+
 [5] Alzubi, J., Nayyar, A., Kumar, A.: Machine Learning from Theory to Algorithms: An Overview. J. Phys.: Conf. Ser. 1142, 012012 (2018). https://doi.org/10.1088/1742-6596/1142/1/012012
+
 [6] Lacalamita, A., Piccinno, E., Scalavino, V., Bellotti, R., Giannelli, G., Serino, G.: A Gene-Based Machine Learning Classifier Associated to the Colorectal Adenoma—Carcinoma Sequence. Biomedicines. 9, 1937 (2021). https://doi.org/10.3390/biomedicines9121937
+
 [7] Hamidi, F., Gilani, N., Kazemnejad, A., Aftabi, Y., Shirforoush-Sattari, M., Jahanimoghadam, A.: Decision tree-based machine learning methods for identifying colorectal cancer-associated microRNA signatures and their regulatory networks. Sci Rep. 15, 34700 (2025). https://doi.org/10.1038/s41598-025-17037-7
+
 [8] Solomon, D.D., Sonia, Kumar, K., Kanwar, K., Iyer, S., Kumar, M.: Extensive Review on the Role of Machine Learning for Multifactorial Genetic Disorders Prediction. Arch Computat Methods Eng. 31, 623–640 (2024). https://doi.org/10.1007/s11831-023-09996-9
+
 [9] Lacalamita, A., Piccinno, E., Scalavino, V., Bellotti, R., Giannelli, G., Serino, G.: A Gene-Based Machine Learning Classifier Associated to the Colorectal Adenoma—Carcinoma Sequence. Biomedicines. 9, 1937 (2021). https://doi.org/10.3390/biomedicines9121937
+
 [10] Qiu, J.: An Analysis of Model Evaluation with Cross-Validation: Techniques, Applications, and Recent Advances. AEMPS. 99, 69–72 (2024). https://doi.org/10.54254/2754-1169/99/2024OX0213
+
 [11] Machine Learning-Based Prediction of the Genetic Background of Colorectal Liver Metastasis Using Mirna Expression Data. General Medicine.
+
 [12] Robin, X., Turck, N., Hainard, A., Tiberti, N., Lisacek, F., Sanchez, J.-C., Müller, M.: pROC: an open-source package for R and S+ to analyze and compare ROC curves. BMC Bioinformatics. 12, 77 (2011). https://doi.org/10.1186/1471-2105-12-77
+
 [13] Ikeoka, S.: Analysis of Machine Learning Based Methods for Identifying MicroRNA Precursors. Master’s Projects. (2009). https://doi.org/10.31979/etd.hvfw-ew3m
