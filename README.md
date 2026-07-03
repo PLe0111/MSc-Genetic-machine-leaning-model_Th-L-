@@ -1,9 +1,13 @@
 # MSc-Genetic-machine-leaning-model_Le
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c184ae23-b1ba-49c0-9bee-51dae31e57aa" />
-##Mục tiêu của đề tài
+## Mục tiêu của đề tài
+
 * Mục tiêu chung: Xây dựng mô hình học máy hỗ trợ chẩn đoán ung thư đại trực tràng
+
 * Đối tượng nghiên cứu: Các miRNA được tách chiết từ huyết tương sau khi phân lập từ máu ngoại vi của các bệnh nhân.
+
 * Mục tiêu cụ thể:
+
 - Xác định các miRNA tiềm năng trong chẩn đoán ung thư đại trực tràng.
 - Xây dựng mô hình học máy hỗ trợ chẩn đoán các ung thư đại trực tràng.
 - Xác định các tương tác miRNA-mRNA và các con đường sinh học liên quan đến các miRNA trong mô hình học máy.
@@ -54,7 +58,8 @@ link GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE112264
 
 workflow thực hiện ở hình 1 em đã được thầy hướng dẫn chỉnh sửa và đồng ý. Tuy nhiên, trong quá trình tìm hiểu và xử lý dữ liệu ra được các miRNA tiềm năng thì em vẫn có những khúc mắc về cách chia tập dữ liệu (Data Splitting Strategy):
 
-- Em đánh giá final model trên tập external validation độc lập như vậy thì cách làm này có tránh bị data leakage không và đánh giá đúng được khả năng học+phân loại của model không ạ?
+- Em đánh giá final model trên tập external validation độc lập như vậy thì cách làm này có tránh bị data leakage không và có đánh giá đúng được khả năng học hay khả năng phân loại mẫu của model dựa trên dữ liệu mức độ biểu hiện của miRNA không ạ?
+
 Vì khi lựa database độc lập để external validation như vậy thì số samples của tập data được gộp em đang thấy không có cơ sở lựa chọn phù hợp so với 2 tập training-testing để đánh giá final model.
 - Em tìm hiểu thì có thấy việc chia training-validation-testing từ 1 full database đã gộp và xử lý batch effect thì em nên thay đổi cách chia dữ liệu sau khi preprocess các GSE hay ở bước nào em thực hiện chia tập cho hợp lý ạ?
 - Hiện tại pipline code em chạy ra đang thực hiện huấn luyện và đánh giá model trên serum của người Nhật, nhưng nếu em lựa chọn database của quần thể dân tộc khác với platform khác để làm external validation thì nó có thực sự đánh giá khả năng phân loại của model trên data của nhiều hơn 2 quần thể người khác nhau không ạ? 		(do đây cũng là câu hỏi em đã từng nhận được từ hội đồng rằng nếu ứng dụng model đã xây dựng để ứng dụng cho bệnh nhân người Việt thì Cơ sở lý luận cho việc sử dụng dữ liệu nghiên cứu quốc tế để lựa chọn biomarker miRNA cho việc sàng lọc trên quần thể người Việt Nam?)
