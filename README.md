@@ -31,41 +31,6 @@ Các dữ liệu bị loại trừ trong quá trình thu nhận dữ liệu:
 
 Các bộ dữ liệu thu nhận sử dụng các công nghệ khác nhau để phân tích nên cần phải loại bỏ các mẫu bị lặp, chuyển đổi tín hiệu từ probe ID sang gene symbol dựa vào file platform annotation. Mẫu trong các tệp dữ liệu được phân loại thành nhóm không ung thư/khỏe mạnh (no-cancer/healthy) và các nhóm của các loại ung thư khác nhau. Sau đó, các tập dữ liệu sẽ được chuẩn hóa (Normalization) bằng cách sử dụng hàm "normalizeBetweenArrays" trong gói phần mềm R “limma”. Các tập dữ liệu GSE sau khi chuẩn hóa sẽ được gộp lại và thực hiện loại bỏ hiệu ứng theo lô (Batch effect) bằng cách sử dụng gói “sva” (v3.5.0) để chia thành 2 nhóm dữ liệu tập huấn (training) và kiểm tra (testing) theo tỷ lệ 70:30 để đảm bảo đánh giá tính tổng quá hóa của mô hình [1]. Nhóm dữ liệu training giúp xác định các dấu ấn sinh học chẩn đoán tiềm năng, trong khi nhóm dữ liệu testing dùng để xác nhận kết quả phân tích.
 
---> Loại data em download từ GEO để chạy code là file SOFT (Simple Omnibus Format in Text). Đây là thông tin lâm sàng của các tập GSE mà em quan tâm và đã sử dụng để thực hiện preprocess:
-
-    - GSE113486: no-cancer control = 100 samples; CRC=40 samples
-link GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE113486 
-
-    - GSE211692: no-cancer control = 5643 samples; CRC = 1596 samples
-link GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE211692 
-
-    - GSE106817: no-cancer control = 2759 samples; CRC = 115 samples 
-link GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE106817 
-
---> Cả 3 GSE trên đều thực hiện trên mẫu serum của người Nhật và cùng 1 platform GPL21263 - 3D-Gene Human miRNA V21_1.0.0. Các tập dữ liệu GSE sau khi chuẩn hóa (Normalization) sẽ được gộp lại và thực hiện Batch effect bằng cách sử dụng gói “sva” (v3.5.0) để chia thành 2 tapaj dữ liệu tập huấn (training) và kiểm tra (testing) theo tỷ lệ 70:30 để đảm bảo đánh giá tính tổng quá hóa của mô hình
--->sau khi gộp và batch effect thì chia ra trainig: testing (internal validation)= 70:30 
-	Tập Train: (7177, 2565) | Tập Test: (3076, 2565)
-
---> Tập dữ liệu external validation em preprocess, normalization và gộp 2 tập GSE dưới đây cũng thực hiện trên mẫu serum người Nhật và cùng platform GPL21263 - 3D-Gene Human miRNA V21_1.0.0:
-
-    - GSE113740: no-cancer control = 969 samples; CRC = 25 samples 
-link GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE113740 
-
-    - GSE112264: no-cancer control = 41 samples; CRC = 50 samples
-link GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE112264 
-
-### --> thắc mắc việc chia các tập dữ liệu training-validation-testing:
-
-workflow thực hiện ở hình 1 em đã được thầy hướng dẫn chỉnh sửa và đồng ý. Tuy nhiên, trong quá trình tìm hiểu và xử lý dữ liệu ra được các miRNA tiềm năng thì em vẫn có những khúc mắc về cách chia tập dữ liệu (Data Splitting Strategy):
-
-- Em đánh giá final model trên tập external validation độc lập như vậy thì cách làm này có tránh bị data leakage không và có đánh giá đúng được khả năng học hay khả năng phân loại mẫu của model dựa trên dữ liệu mức độ biểu hiện của miRNA không ạ?
-
-Vì khi lựa database độc lập để external validation như vậy thì số samples của tập data được gộp em đang thấy không có cơ sở lựa chọn phù hợp so với 2 tập training-testing để đánh giá final model.
-- Em tìm hiểu thì có thấy việc chia training-validation-testing từ 1 full database đã gộp và xử lý batch effect thì em nên thay đổi cách chia dữ liệu sau khi preprocess các GSE hay ở bước nào em thực hiện chia tập cho hợp lý ạ?
-- Hiện tại pipline code em chạy ra đang thực hiện huấn luyện và đánh giá model trên serum của người Nhật, nhưng nếu em lựa chọn database của quần thể dân tộc khác với platform khác để làm external validation thì nó có thực sự đánh giá khả năng phân loại của model trên data của nhiều hơn 2 quần thể người khác nhau không ạ? 		(do đây cũng là câu hỏi em đã từng nhận được từ hội đồng rằng nếu ứng dụng model đã xây dựng để ứng dụng cho bệnh nhân người Việt thì Cơ sở lý luận cho việc sử dụng dữ liệu nghiên cứu quốc tế để lựa chọn biomarker miRNA cho việc sàng lọc trên quần thể người Việt Nam?)
-- Cuối tháng 6/2026, thầy hướng dẫn có định hướng cho em preprocess database của miRNA trên mẫu mô (tissue) (trên cơ sở TCGA hoặc GEO hoặc cBioPortal) với thông tin lâm sàng là survival hoặc về treatment và sau đó so sánh tìm các miRNA giao thoa với bộ data circulating miRNA trên mẫu máu ngoại vi (blood/serum/plasma) ở bước DE-feature selection rồi mới đưa vào chạy model để cuối cùng có thể kết luận các miRNA tiềm năng được chọn không những có sự khác biệt giữa CRC-no cancer mà còn có thể đánh giá khả năng tiên lượng, vì thầy thấy nếu chỉ làm circulation miRNA trong hệ máu ngoại vi thì vẫn cần thực nghiệm để đánh giá. Tuy nhiên, em tìm hiểu biểu hiện của miRNA trong mẫu mô và máu ngoại vi khác nhau do cơ chế xuất nhập bào của miRNA giữa các tê bào; và việc lựa chọn input data từ 2 loại mẫu khác nhau em nghĩ sẽ dẫn đến mục tiêu của xây dựng model khác nhau. Theo anh thì em nên phân tích databáe của miRNA trên mô kết hợp với database của circular miRNA như thế nào để xây dựng mô hình hợp lý?
-- Em đang dự định chỉnh sửa nội dung đề cương bổ sung thêm phần thực nghiệm để đánh giá các kết quả phân loại của model đưa ra. Mục tiêu nghiên cứu ban đầu em làm wetlab kết hợp sau drylab là xác định các miRNA tiềm năng trở thành biomarker trong chẩn đoán sớm CRC trong plasma người Việt. Tuy nhiên khi thực hiện pipline thì các database GSE đưa vào tập trung và các sample Healthy/no-cancer vs các loại bệnh → Theo anh thì em để lựa chọn loại dữ liệu input cho quy trình dựng ML model như thế nào cho phù hợp ạ? Bên cạnh đó, khi phân loại mẫu plasma người Việt cho thực nghiệm, theo anh em có nên thực hiện trên cả các mẫu viêm, polyp, loạn sản, Adenoma luôn để có thể đạt được mục tiêu nghiên cứu ban đầu không ạ? 
-
 ## 2. Phân tích mức độ biểu hiện khác biệt (Difference Expression Gene – DEG):
 
 Mức độ biểu hiện miRNA giữa nhóm mẫu bệnh và nhóm chứng có sự khác nhau nên sẽ được phân tích dựa trên phân tích biểu hiện khác biệt được thực hiện để tìm các miRNA được biểu hiện khác biệt (Difference Expression – DE) trong các điều kiện khác nhau.
@@ -76,11 +41,6 @@ Các dữ liệu được đưa vào phân tích sẽ có sự khác nhau về c
 <img width="83" height="61" alt="image" src="https://github.com/user-attachments/assets/8547cf5e-e7b8-4587-beb5-a7ccfeb6ea93" />
 (1)
 trong đó μ và σ là giá trị trung bình và độ lệch chuẩn của đặc tính x được tính toán trên tất cả các mẫu trong tập dữ liệu. Giá trị chuẩn hóa của x là z [4]. Bên cạch đó, để tìm ra các miRNA có giá trị khác biệt giữa nhóm bệnh và nhóm đối chứng của mỗi tệp dữ liệu thì giá trị p-value giữa hai nhóm bệnh và đối chứng được xác định. Khi p-value giảm, ý nghĩa thống kê tăng lên. Do đó, trong mỗi tệp dữ liệu các miRNA được sắp xếp theo thứ tự tăng dần dựa trên p-value của chúng [4]. Sau khi xử lý và chuẩn hóa dữ liệu, số liệu về mức độ biểu hiện của miRNA trong nhóm mẫu không ung thư/khỏe mạnh với nhóm CRCs sẽ được so sánh để đưa ra giá trị Mean cho mức độ biểu hiện miRNA giữa các nhóm thông qua kiểm nghiệm tham số, phi tham số.
-
-## --> Thắc mắc về chỉ số Z-score:
-
-Khi em được hướng dẫn vẽ workflow Hình 1 vào tháng 3/2026 thì thầy hướng dẫn và chị NCS phụ trách pipline code có mẫu thuẫn việc sử dụng Z-score sau khi đã thực hiện DE hay trước khi gộp+batch effect các GSE. Trong pipline code em chạy em tham khảo các pipline của các labmate thì các bạn đang chạy chuẩn hóa bằng Quantile bằng gói limma của R và thực hiện Z-score sau khi chạy DE.
---> Nên em thắc mắc về sự khác biệt của phương pháp Quantile với Zscore và có cần thiết chạy Z-score sau khi normalizeation các GSE không ạ? Nếu cần chạy Z-score thì em nên thực hiện ở bước nào ạ?
 
 ## 3. Lựa chọn đặc trưng (Feature Selection):
 
@@ -95,13 +55,6 @@ Boruta khởi tạo quá trình bằng cách tạo ra các đặc điểm bóng.
 Để xác định các mối liên kết và mẫu giữa tập hợp các biến đầu vào, xác minh xem biểu hiện miRNA có thể mô tả giữa hai nhóm bệnh và nhóm đối chứng hay không, nhóm nghiên cứu thực hiện các thuật toán theo phương pháp chính: học có giám sát (Under Supervised Learning). Phương pháp học có giám sát (Under Supervised Learning) được sử dụng cho xây dựng học máy để phân loại và kết quả trả ra là có hoặc không hoặc nhị phân 0-1 như (tốt hoặc xấu) để có được kết quả đa lớp như (ví dụ: cây, bụi cây hoặc cỏ). Hồi quy (Regression) một phần phụ khác của loại học có giám sát, trong đó các thuật toán được sử dụng trong loại này luôn tạo ra một giá trị số. Phân cụm (Clustering) là một phân của phương pháp học có giám sát với nhiệm vụ là nhóm các tập dữ liệu chưa được gắn nhãn, chính xác hơn, đó là một phương pháp nhóm các điểm dữ liệu thành các cụm riêng biệt dựa trên sự tương đồng của chúng [8].
 
 Các thuật toán được sử dụng để xây dựng mô hình học máy gồm: Hồi quy tuyến tính (Linear Regression), Hồi quy Logistic (Logistic Regression),  Máy hỗ trợ vectơ (Support Vector Machine), Naïve Bayes, K-Means Clustering, K-Nearest Neighbors, Decision Tree, Thuật toán giảm chiều dữ liệu (Dimensionality Reduction Algorithms), Artificial Neural Networks.
-
-### --> Thắc mắc về việc lựa chọn model phù hợp:
-
-Các model em kể ở phần nội dung trên và 7 model em thực hiện trong pipline code là các model mà lab đang thực hiện và em tham khảo để chạy. Tuy nhiên cách xây dựng model hiện tại em được hướng dẫn là chạy các model có thể và cho ra model có các chỉ số tối ưu nhất làm final model. Bên cạnh đó, các kết quả model trả ra trong pipline em chạy thì em không ra được các dữ liệu phân biệt sư thay đổi biểu hiện của miRNA giữa mẫu CRC với No Cancer, vì thế em chạy thêm phần “xu hướng sinh học” trong pipline code.
-
-- em thắc mắc sau khi em phân tích DE và Feature Selection thu được danh sách 11 miRNA tiềm năng với giá trị logFC và  adj.P.Val thì làm thế nào để em có thể đưa ra được các tiêu chí để lựa chọn các model để xây dựng-huấn luyện ạ?
-- Hội đồng duyệt đề cương có hỏi em rằng khi đã có danh sách các miRNA tiềm năng rồi thì tại sao phải cần sử dụng model để phân loại nữa. Theo anh thì em nên giải thích theo góc độ toán học và sinh học như thế nào ạ? Và anh có nhận xét góp ý chỉnh sửa hình workflow ở bước đánh giá final model như thế nào cho phù hợp hay logic hơn không ạ?
 
 ## 5. Đánh giá mô hình học máy
 
